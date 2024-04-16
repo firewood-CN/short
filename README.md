@@ -8,7 +8,7 @@
 
 一个使用 Cloudflare Pages 创建的 URL 缩短器。
 
-*示例* : [https://4.molikai.work/](https://4.molikai.work/)
+*示例* : [https://dwl.pages.dev/](https://dwl.pages.dev/)
 
 
 ### 利用 Cloudflare Pages 部署
