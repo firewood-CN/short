@@ -80,10 +80,13 @@ CREATE TABLE IF NOT EXISTS banUrl (
 
 ```bash
 # POST /create
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com"}' https://d.131213.xyz/create
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com"}' https://dwl.pages.dev/create
 
-# 指定slug
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com","slug":"example"}' https://d.131213.xyz/create
+# 指定 slug
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com","slug":"1example"}' https://dwl.pages.dev/create
+
+# 指定 email
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com","email":"1@example.com"}' https://dwl.pages.dev/create
 
 ```
 
@@ -91,7 +94,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com
 
 ```json
 {
-  "slug": "example",
+  "slug": "1example",
   "link": "http://d.131213.xyz/example"
 }
 ```
