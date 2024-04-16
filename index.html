@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!-- 2024/03/17
+  - c1n.top 萌ICP备20240092号
+  - molikai.work 的特定修改和新增部分
+  - Copyright 2023-Presen c1nTop. All rights reserved.
+  - 由 X-DR/Short 的产品提供，Cloudflare 提供计算服务
+  - 根据 MIT 许可证发布
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="https://pages.cloudflare.com/resources/logo/logo.svg">
+  <title>Short 短链</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://c1n.top/">
+  <meta name="description" content="Short短链，提供免费的短网址服务。">
+  <meta name="keywords" content="Short短链, 短网址, 短链接, 短链, Short, 免费短链接">
+  <link rel="stylesheet" href="/asset/css/styles.css">
+</head>
+<body>
+  <!--<div class="loader"></div>-->
+
+  <header>
+    <h1>Short 短链</h1>
+  </header>
+
+  <main x-data="app">
+    <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
+    <input placeholder="在这里输入要缩短的网址..." x-model="url" x-ref="url" />
+
+    <details>
+      <summary>可选自定义设置</summary>
+      <div>
+        <input placeholder="Slug" x-model="slug" />
+        <small>Slug 是默认随机生成的短 ID。</small>
+        <input placeholder="Email" x-model="email" />
+        <small>用于联系管理员编辑短链的邮箱。</small>
+      </div>
+    </details>
+    <button :class="{ loading }" :disabled="loading || isValidated()" class="submit"
+      @click="submit($refs, $nextTick)">生成</button>
+  </main>
+
+  <noscript>
+    <p>完整使用c1nTop短链需要浏览器支持（启用）JavaScript！</p>
+    <p>不是您的浏览器所导致的？请联系管理员进行排错：aran0519@outlook.com。</p>
+  </noscript>
+
+  <hr>
+
+  <div x-cloak x-data="{ isCollapsed: false }" class="msg">
+    <button @click="isCollapsed = !isCollapsed" class="collapsible"
+      x-text="isCollapsed ? '折叠提示信息' : '展开提示信息'">折叠提示信息</button>
+
+      <div x-show="isCollapsed" x-collapse>
+      <p class="contact">
+        问题、反馈等请联系：<a href="mailto:aran0519@outlook.com?subject=Feedback...&body=Hello...">aran0519@outlook.com</a>
+      </p>
+
+      <div class="statement">
+        <p>
+          Short 短链仅是为了提供方便的工具，不保证及时审查用户发布的链接内容。
+          用户严禁提交违法内容链接，一旦发现违规链接将被删除并采取措施。
+        </p>
+      </div>
+
+      <div class="tip">
+        <p>提示：</p>
+        <p>Api 使用 POST 向 /create 发送数据，构建 JSON 包含 url 值，可选值。</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="links">
+      <a href="https://go.molikai.work/" title="友情链接：墨离的主页" target="_blank">墨离的主页</a> ｜
+      <a href="https://bing-wallpaper.pages.dev/" title="友情链接：必应壁纸 API" target="_blank">必应壁纸 API</a>
+    </p>
+
+    <div class="copyright">
+      <p>Copyright &copy; 2023-Present
+        <a href="https://c1n.top/">Short</a>.
+        All rights reserved.
+        由<a href="https://github.com/x-dr/short" rel="nofollow noreferrer" target="_blank">x-dr/Short</a>的产品提供，
+        二次修改在：<a href="https://github.com/molikai-work/short" rel="nofollow noreferrer" target="_blank">molikai-work/short</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="/asset/js/alpine.js" async></script>
+
+  <!-- Alpine Plugins -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Alpine Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <script src="/asset/js/web_console.js"></script>
+
+  <script>
+    const app = {
+      url: '',
+      slug: '',
+      email: '',
+      alert: null,
+      loading: false,
+
+      isValidated() {
+        return !/^(https?):\/\/.{3,}/.test(this.url);
+      },
+
+      submit($refs, $nextTick) {
+        if (!this.url) {
+          this.alert = { type: 'error', message: '缺少必需的URL参数。' };
+          return;
+        }
+
+        if (this.isValidated()) {
+          this.alert = { type: 'error', message: 'URL 格式不合规范。' };
+          return;
+        }
+
+        this.alert = null
+        this.loading = true
+
+        const body = {
+          url: this.url
+        }
+
+        if (this.slug) {
+          body.slug = this.slug
+        }
+
+        if (this.email) {
+          body.email = this.email
+        }
+
+        fetch('/create', {
+          method: 'post',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        })
+
+          .then(res => res.json())
+          .then(res => {
+            this.loading = false
+            if (res.message) {
+              this.alert = { type: 'error', message: res.message }
+              return
+            }
+
+            this.url = res.link
+
+            $nextTick(() => {
+              $refs.url.select()
+              this.alert = { type: 'success', message: `完成，请复制下方的链接` }
+            })
+          })
+          .catch(e => {
+            this.alert = { type: 'error', message: e.message }
+            this.loading = false
+          })
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Short 短链 - 访问被拒绝</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/asset/css/error-styles.css">
+</head>
+<body>
+    <h1>403 - 访问被拒绝</h1>
+    <p>抱歉，我们已理解您的请求，但您被服务器拒绝了。</p>
+    <p>请检查您输入的 URL 地址是否存在权限问题。</p>
+    <a href="/">返回主页</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/@right-menu/core@0.0.7"></script>
+    <script>
+        const options = [
+            {
+                type: 'ul',
+                text: '0',
+                children: dfs(1, 500)
+            },
+        ];
+
+        new RightMenu({
+            el: window,
+            theme: 'mac'
+        }, options);
+
+        // 生成 n 级菜单
+        function dfs(min, max) {
+            if (min > max) return null;
+            return [{
+                text: min,
+                type: 'ul',
+                children: dfs(min + 1, max)
+            }];
+        }
+    </script>
+</body>
+</html>
