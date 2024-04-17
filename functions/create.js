@@ -192,12 +192,24 @@ export async function onRequest(context) {
             })
         }
 
-        // 检查是否指向相同域名
-        if (bodyUrl.hostname === hostName) {
-            return Response.json({ message: '您不能缩短指向同一域的链接。- H403' }, {
-                headers: corsHeaders,
-                status: 403
-            })
+        // 检查环境变量是否存在
+        if (!env.FORBIDDEN_DOMAINS) {
+            // 检查是否指向相同域名(获取当前域名)
+            if (bodyUrl.hostname === hostName) {
+                return Response.json({ message: '您不能缩短指向同一域的链接。- H403' }, {
+                    headers: corsHeaders,
+                    status: 403
+                })
+            }
+        } else {
+            // 检查是否指向相同域名(允许解析的域名)
+            const allowDomains = env.ALLOW_DOMAINS.split(',');
+            if (allowDomains.includes(bodyUrl.hostname)) {
+                return Response.json({ message: '您不能缩短指向同一域的链接。- H403' }, {
+                    headers: corsHeaders,
+                    status: 403
+                })
+            }
         }
 
         // 生成随机 slug
