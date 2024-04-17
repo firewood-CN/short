@@ -1,7 +1,7 @@
 {
   "name": "short",
   "version": "1.0.0",
-  "description": "A URL Shortener created using Cloudflare Pages",
+  "description": "A Cloudflare Pages-based URL shortener (short URL) that has been modified and optimized to add functionality. Source code: x-dr/short, thanks!",
   "main": "index.js",
   "dependencies": {
     "wrangler": "^3.5.1"
@@ -14,16 +14,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/x-dr/short.git"
+    "url": "git+https://github.com/molikai-work/short.git"
   },
   "keywords": [
+    "pages",
     "short",
     "url"
   ],
-  "author": "x-dr",
+  "author": "x-dr, molikai-work",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/x-dr/short/issues"
+    "url": "https://github.com/molikai-work/short/issues"
   },
-  "homepage": "https://github.com/x-dr/short#readme"
+  "homepage": "https://github.com/molikai-work/short#readme"
 }
