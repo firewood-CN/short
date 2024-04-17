@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS banUrl (
 | SHORT_DOMAINS     | example.com               | 是的 | 短链生成后的显示域名，没有变量则默认自动获取当前域名 |
 | FORBIDDEN_DOMAINS | example.com,*.example.com | 是的 | 黑名单域名，支持通配，设置后在创建时该域名就会被拦截，多个用逗号分割，没有变量则默认不启用黑名单 |
 | DIRECT_DOMAINS    | example.com,example.org   | 是的 | 直链域名，设置后使用该域名访问则直接 302 重定向跳转，而不是默认的 JS 跳转，多个用逗号分割，没有变量则默认不启用直链跳转 |
-| ALLOW_DOMAINS     | example.com,example.org   | 是的 | 允许解析目标地址的域名白名单，设置后只能使用该域名解析目标地址，否则拒绝请求，多个用逗号分割，没有变量则默认不启用允许解析域名白名单 |
+| ALLOW_DOMAINS     | example.com,example.org   | 是的 | 允许解析目标地址的域名白名单和生成时不允许重复生成的域名名单，设置后不能使用该域名生成短链和只能使用该域名解析目标地址，否则拒绝请求，多个用逗号分割，没有变量则默认不启用允许解析域名白名单 |
 
 ### 通过 API 生成
 
