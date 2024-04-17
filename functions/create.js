@@ -193,7 +193,7 @@ export async function onRequest(context) {
         }
 
         // 检查环境变量是否存在
-        if (!env.FORBIDDEN_DOMAINS) {
+        if (!env.ALLOW_DOMAINS) {
             // 检查是否指向相同域名(获取当前域名)
             if (bodyUrl.hostname === hostName) {
                 return Response.json({ message: '您不能缩短指向同一域的链接。- H403' }, {
