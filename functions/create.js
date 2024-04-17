@@ -193,7 +193,7 @@ export async function onRequest(context) {
         }
 
         // 检查是否指向相同域名
-        if (bodyUrl.hostname === 'c1n.top' || bodyUrl.hostname === 'c1n.pages.dev' || bodyUrl.hostname === 'sagrre.icu' || bodyUrl.hostname === 'www.rovn.ink') {
+        if (bodyUrl.hostname === hostName) {
             return Response.json({ message: '您不能缩短指向同一域的链接。- H403' }, {
                 headers: corsHeaders,
                 status: 403
