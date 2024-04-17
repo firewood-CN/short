@@ -8,7 +8,7 @@
 
 一个使用 Cloudflare Pages 创建的 URL 缩短器。
 
-*示例* : [https://dwl.pages.dev/](https://dwl.pages.dev/)
+*示例* : [https://dwl.pages.dev/](https://dwl.pages.dev/) (仅示范，不保证稳定性)
 
 
 ### 利用 Cloudflare Pages 部署
