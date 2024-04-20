@@ -95,6 +95,6 @@ curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com
 ```json
 {
   "slug": "1example",
-  "link": "http://d.131213.xyz/example"
+  "link": "http://dwl.pages.dev/1example"
 }
 ```
