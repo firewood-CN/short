@@ -36,16 +36,42 @@ export async function onRequest(context) {
         });
     }
 
-    // 获取各种数据
+    // 定义 CORS 相关的响应头部信息
+    const corsHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '86400',
+    };
+
+    // 获取客户端 IP、IP 来源地址、用户代理、Referer 和主机名等信息
     const { request, env } = context;
-    const originurl = new URL(request.url);
-    const clientIP = request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
+    const clientIP = request.headers.get("CF-Connecting-IP") || request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
+    const countryIP = request.headers.get("CF-IPCountry")
     const userAgent = request.headers.get("user-agent");
-    const origin = `${originurl.protocol}//${originurl.hostname}`
+
+    const originurl = new URL(request.url);
+    const origin = `${originurl.protocol}//${originurl.hostname}` // 获取 "请求协议//请求主机名"
 
     const hostName = request.headers.get('host');
 
-    const options = {
+    // 如果请求的主机名不是原 API 的主机名
+    if (!env.SHORT_DOMAINS) {
+        // 环境变量不存时跳过代码执行
+    } else if (hostName !== `${env.SHORT_DOMAINS}`) {
+        // 构建重定向 URL
+/*        const redirectURL = `https://${env.SHORT_DOMAINS}/create`;
+
+        // 返回重定向响应
+        return Response.redirect(redirectURL, 307);*/
+
+        return new Response(null, {
+            headers: corsHeaders,
+            status: 403
+        });
+    }
+
+    // 配置日期格式选项
+/*    const options = {
         timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'long',
@@ -61,19 +87,18 @@ export async function onRequest(context) {
 
     // 根据语言 zh-CN 格式化日期
     const formattedDate = new Intl.DateTimeFormat('zh-CN', options).format(timedata);
+*/
+
+    const formattedDate = new Date().toISOString();
 
     // 从 JSON 数据中解构出 url 和 slug
     const { url, slug, email } = await request.json();
 
-    // 定义 CORS 相关的响应头部信息
-    const corsHeaders = {
-        'Access-Control-Allow-Origin': '*', // 允许任意来源的跨域请求
-        'Access-Control-Allow-Headers': 'Content-Type', // 允许请求头部中包含 Content-Type
-        'Access-Control-Max-Age': '86400', // 预检请求的有效期为 86400 秒
-    };
-
+    // 开始进入参数检查
+    // 1. 必须有 URL 参数 ------------------------------
     if (!url) return Response.json({ message: '缺少必需的 URL 参数。- H400' });
 
+    // 2. URL 必须符合要求 ------------------------------
     // url 格式检查
     if (!/^(https?):\/\/.{3,}/.test(url)) {
         return Response.json({ message: 'URL 格式不合规范。- H400' }, {
@@ -82,7 +107,37 @@ export async function onRequest(context) {
         })
     }
 
-    // 自定义slug长度检查 4<slug<8 是否不以文件后缀结尾、含有特殊字符
+    // 3. URL 的顶级域名必须允许 ------------------------------
+    const levelDomain = new URL(url).hostname.split('.').pop();
+    // 检查顶级域名是否允许
+    if (levelDomain === 'gov' || levelDomain === 'edu' || levelDomain === 'adult') {
+        return Response.json({ message: '禁止缩短的特定顶级域名。- H403' }, {
+            headers: corsHeaders,
+            status: 403
+        });
+    }
+
+    // 4. URL 必须不在黑名单中 ------------------------------
+    // 提取原 URL 的一级域名部分
+    const urlHostname = new URL(url).hostname.split('.').slice(-2).join('.');
+
+    // 查询 banUrl 表是否存在该一级域名
+    const banUrlQueryResult = await env.DB.prepare(`
+        SELECT id AS id
+        FROM banUrl 
+        WHERE url = '${urlHostname}'
+    `).first();
+
+    // 如果存在 banUrl 记录，则返回 403
+    if (banUrlQueryResult) {
+        return Response.json({ message: '禁止缩短的黑名单域。- H403' }, {
+            headers: corsHeaders,
+            status: 403
+        });
+    }
+
+    // 5. 自定义的 Slug 必须符合要求 ------------------------------
+    // 自定义 Slug 长度检查 4<slug<8 是否不以文件后缀结尾、含有特殊字符
     if (slug && (slug.length < 4 || slug.length > 8 || /^\.[a-zA-Z]|^[a-zA-Z]|[^.\w\u4E00-\u9FA5]|\..+\.[a-zA-Z]+$|(\.[a-zA-Z]+)$|(\.)$/.test(slug))) {
         return Response.json({ message: 'Slug 4-8位且不能以点(字母)开头或结束、含有特殊字符和文件扩展名。- H400' }, {
             headers: corsHeaders,
@@ -90,13 +145,15 @@ export async function onRequest(context) {
         });
     }
 
-    // email 格式检查
+    // 6. 如果有 Email 那么必须符合要求 ------------------------------
+    // Email 格式检查
     if (email && !/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email)) {
         return Response.json({ message: 'Email 格式不合规范。- H400' }, {
             headers: corsHeaders,
             status: 400
         })
     }
+// 进入参数检查结束
 
     try {
         const bodyUrl = new URL(url); // 获取链接中的域名
@@ -107,49 +164,7 @@ export async function onRequest(context) {
         if (!env.SHORT_DOMAINS) {
             customOrigin = origin;
         } else {
-            customOrigin = `http://${env.SHORT_DOMAINS}`;
-        }
-
-        // 检查环境变量是否存在
-        if (!env.FORBIDDEN_DOMAINS) {
-            // 环境变量不存时跳过代码执行
-        } else {
-            // 读取环境变量域名黑名单
-            const forbiddenDomains = env.FORBIDDEN_DOMAINS.split(',');
-
-            // 检查黑名单中的域名是否有通配符
-            function isWildcardDomain(domain) {
-                return domain.startsWith('*.');
-            }
-
-            // 检查是否是通配符域名的子域名 (兼容多级域名的通配符)
-            /*function isWildcardDomain(domain) {
-                const parts = domain.split('.');
-                return parts.length > 2 && parts[0] === '*' && parts[1] === '';
-            }*/
-
-            // 检查是否是通配符域名的子域名
-            function isSubdomain(subdomain, domain) {
-                return subdomain.endsWith('.' + domain);
-            }
-
-            // 判断是否应该封禁该域名
-            function shouldBlockDomain(blacklistedDomain, hostname) {
-                if (isWildcardDomain(blacklistedDomain)) {
-                    const domain = blacklistedDomain.slice(2); // 移除 *. 前缀
-                    return isSubdomain(hostname, domain);
-                } else {
-                    return hostname === blacklistedDomain;
-                }
-            }
-
-            // 检查请求的域名是否在黑名单中
-            if (forbiddenDomains.some(blacklistedDomain => shouldBlockDomain(blacklistedDomain, bodyUrl.hostname))) {
-                return Response.json({ message: '此域在黑名单中。- H403' }, {
-                    headers: corsHeaders,
-                    status: 403
-                });
-            }
+            customOrigin = `https://${env.SHORT_DOMAINS}`;
         }
 
         // 如果自定义slug
@@ -194,7 +209,7 @@ export async function onRequest(context) {
 
         // 检查环境变量是否存在
         if (!env.ALLOW_DOMAINS) {
-            // 检查是否指向相同域名(获取当前域名)
+            // 检查是否指向相同当前域名
             if (bodyUrl.hostname === hostName) {
                 return Response.json({ message: '您不能缩短指向同一域的链接。- H403' }, {
                     headers: corsHeaders,
@@ -213,11 +228,11 @@ export async function onRequest(context) {
         }
 
         // 生成随机 slug
-        const generatedSlug = slug ? slug : generateRandomString(5); // 长度为5的随机字符串
+        const generatedSlug = slug ? slug : generateRandomString(5); // 长度为 5 的随机字符串
 
         // 插入数据到数据库
         const info = await env.DB.prepare(`INSERT INTO links (url, slug, email, ip, status, ua, hostname, create_time)
-        VALUES ('${url}', '${generatedSlug}', '${email}', '${clientIP}', 'ok', '${userAgent}', '${hostName}', '${formattedDate}')`).run()
+        VALUES ('${url}', '${generatedSlug}', '${email}', '${clientIP}/${countryIP}', 'ok', '${userAgent}', '${hostName}', '${formattedDate}')`).run()
 
         // 返回短链接信息
         return Response.json({ slug: generatedSlug, link: `${customOrigin}/${generatedSlug}` }, {
@@ -225,8 +240,13 @@ export async function onRequest(context) {
             status: 200
         })
     } catch (e) {
-        // 处理异常情况
-        return Response.json({ message: e.message }, {
+        // 错误处理
+        return Response.json({
+            code: 500,
+            msg: "error",
+            time: Date.now(),
+            message: e.message
+        }, {
             headers: corsHeaders,
             status: 500
         })

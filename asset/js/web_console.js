@@ -39,7 +39,7 @@ const timeDiff = currentDate.getTime() - startDate.getTime();
 // 将时间差转换为天数
 const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
-// 构建时间的输出文本
+// 打印控制台输出
 console.log('%c' + `
         _               _____
   ___  / |  _ __       |_   _|__  _ __
@@ -56,7 +56,7 @@ console.log('%c' + `
 
 ` + `
 Copyright 2023-Presen %cc1nTop.%c All rights reserved.
-由 %cX-DR/Short%c 的产品提供，二次修改在 %cmolikai-work/short%c ，%cCloudflare%c 提供计算服务。
+由 %cX-DR/Short%c 的产品提供，二次修改在 %cmolikai-work/short%c，%cCloudflare%c 提供计算服务。
 
 `
 , 'color: lightcyan;', 

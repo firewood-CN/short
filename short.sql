@@ -26,18 +26,9 @@ DROP TABLE IF EXISTS banUrl;
 CREATE TABLE IF NOT EXISTS banUrl (
   `id` INTEGER PRIMARY KEY NOT NULL,
   `url` TEXT,
-  `create_time` TEXT DEFAULT (strftime('%Y年%m月%d日 %H:%M:%S', 'now'))
-);
+  `create_time` TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 
-/*-- DROP TABLE IF EXISTS banSlug;
-CREATE TABLE IF NOT EXISTS banSlug (
-  `id` INTEGER PRIMARY KEY NOT NULL,
-  `slug` TEXT,
-  `create_time` TEXT DEFAULT (strftime('%Y年%m月%d日 %H:%M:%S', 'now'))
 );
--- DROP TABLE IF EXISTS banIP;
-CREATE TABLE IF NOT EXISTS banIP (
-  `id` INTEGER PRIMARY KEY NOT NULL,
-  `ip` TEXT,
-  `create_time` TEXT DEFAULT (strftime('%Y年%m月%d日 %H:%M:%S', 'now'))
-); */
+CREATE UNIQUE INDEX links_index ON links(slug);
+CREATE INDEX logs_index ON logs(slug);
+CREATE UNIQUE INDEX banUrl_index ON banUrl(url);

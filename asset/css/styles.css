@@ -9,18 +9,12 @@
 }
 
 :root {
-  --color-primary: #617ce6;
-  /* 主色调 */
-  --color-primary-dark: #4b69e0;
-  /* 深色主色调 */
-  --color-primary-alpha: #5c7cfa50;
-  /* 主色调半透明 */
-  --body-color: #f4f4f4;
-  /* 文字颜色 */
-  --body-bg: #333;
-  /* 背景颜色 */
-  --border-color: #666;
-  /* 边框颜色 */
+  --color-primary: #617ce6; /* 主色调 */
+  --color-primary-dark: #4b69e0; /* 深色主色调 */
+  --color-primary-alpha: #5c7cfa50; /* 主色调半透明 */
+  --body-color: #f4f4f4; /* 文字颜色 */
+  --body-bg: #333; /* 背景颜色 */
+  --border-color: #666; /* 边框颜色 */
 }
 
 ::-webkit-scrollbar {
@@ -47,41 +41,30 @@
 }
 
 body {
-  max-width: 30rem;
-  margin: 0 auto;
-  padding: 2rem;
   color: var(--body-color);
   background: var(--body-bg);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   line-height: 1.5;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-/*.loader {
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
+.canister {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+.noto-color-emoji-regular {
+  font-family: "Noto Color Emoji", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}*/
 
 a {
   text-decoration: none;
-  color: #669966;
+  color: #6aac6a;
   /*inherit; #8ac891*/
   position: relative;
 }
@@ -109,7 +92,7 @@ h1 {
   font-weight: 300;
   /*font-family: LXGWWenKaiGBScreen;*/
   text-align: center;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 header p {
@@ -117,14 +100,14 @@ header p {
   color: #697969;
 }
 
-/*  main[x-cloak] {
-    opacity: 0;
-  }
+main[x-cloak] {
+  opacity: 0;
+}
 
-  main:not([x-cloak]) {
-    opacity: 1;
-    transition: opacity 0.3s;
-  }*/
+main:not([x-cloak]) {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
 
 /*#qr-canvas-container {
     display: flex;
@@ -186,7 +169,7 @@ details summary {
 
 details div {
   padding: 1rem;
-  background: #dbdbdb;
+  background: #c3c3c3;
   border-top: 1px solid var(--border-color);
 }
 
@@ -250,7 +233,6 @@ details small {
 
 .msg {
   text-align: center;
-  opacity: 0.8;
 }
 
 .msg p {
@@ -283,25 +265,36 @@ details small {
 }
 
 .statement p {
-  color: #6b5555;
+  color: #7c5757;
 }
 
 .tip p {
-  font-size: 14px;
+  font-size: 15px;
   margin: 5px 5px 5px 5px;
+  margin-bottom: 8px;
 }
 
-table {
+.domain-table {
   display: flex;
   justify-content: center;
   border: 2px solid #111;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+#iconceCom {
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  opacity: 0.8;
 }
 
 footer {
   border-top: 1px solid var(--border-color);
   text-align: center;
-  opacity: 0.6;
+  opacity: 0.9;
 }
 
 footer p {
@@ -310,16 +303,16 @@ footer p {
 
 .links {
   font-size: 16px;
-  margin: 20px 5px 0px 5px;
+  margin: 20px 5px 20px 5px;
 }
 
 .copyright p {
   font-size: 16px;
-  margin: 20px 5px 0px 5px;
+  margin: 0px 5px 10px 5px;
 }
 
 .copyright a {
-  color: #72988c;
+  color: #729888;
 }
 
 .success,
@@ -329,7 +322,7 @@ footer p {
   border-radius: 0.25rem;
   color: #fff;
   text-align: center;
-  opacity: 1;
+  opacity: 0.9;
   transition: opacity 0.3s;
 }
 
@@ -346,5 +339,11 @@ footer p {
 @keyframes rotate {
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  #iconceCom {
+    display: none;
   }
 }

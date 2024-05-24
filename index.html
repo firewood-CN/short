@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- 2024/03/17
+  - c1n.top 萌ICP备20240092号
   - molikai-work 的特定修改和新增部分
   - Copyright 2023-Presen c1nTop. All rights reserved.
   - 由 X-DR/Short 的产品提供，二次修改在：molikai-work/short，Cloudflare 提供计算服务
@@ -7,160 +8,209 @@
 -->
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="https://pages.cloudflare.com/resources/logo/logo.svg">
-  <title>Short 短链</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="canonical" href="https://c1n.top/">
-  <meta name="description" content="Short短链，提供免费的短网址服务。">
-  <meta name="keywords" content="Short短链, 短网址, 短链接, 短链, Short, 免费短链接">
-  <link rel="stylesheet" href="/asset/css/styles.css">
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/asset/image/logo/ico/logo.ico" />
+  <title>c1nTop 短链|首页</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-66Q9VD7LGH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-66Q9VD7LGH');
+  </script>
+
+  <script src="/asset/js/script.js"></script>
+
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="LUmEJES3EfPVZS8EF6Yv29Xj5C-kZbz326AiLePYr3E" /><!-- End Google Site Verification -->
+
+  <!-- Bing Site Verification -->
+  <meta name="msvalidate.01" content="1C3338F0A6EDADA90E8E1D74939C1BEF" /><!-- End Bing Site Verification -->
+
+  <!-- Baidu Site Verification -->
+  <meta name="baidu-site-verification" content="codeva-n0tqwbEFSN" /><!-- End Baidu Site Verification -->
+
+  <link rel="canonical" href="https://c1n.top/" />
+  <meta name="description" content="c1nTop短链，您的免费短网址服务提供者。缩短长链接，便捷分享，来c1nTop一键生成您的个性化短链！" />
+  <meta name="keywords" content="c1nTop短链, 免费短网址服务, 短链接生成, 短网址, 长链转短链, 长链缩短" />
+
+  <!-- og Meta -->
+  <meta property="og:type" value="website" />
+  <meta property="og:title" value="c1nTop 短链" />
+  <meta property="og:description" value="一个提供免费的短网址服务的短链。" />
+  <meta property="og:url" value="https://c1n.top/" />
+  <meta property="og:image:width" value="64" />
+  <meta property="og:image:height" value="64" />
+  <meta property="og:image" value="https://c1n.top/asset/image/logo/png/logo.png" />
+  <meta property="og:image:alt" value="c1nTop Logo" />
+  <!-- End og Meta -->
+
+  <!-- Twitter Meta -->
+  <meta name="twitter:card" value="summary" />
+  <meta name="twitter:site" value="@molikai" />
+  <meta name="twitter:title" value="c1nTop 短链" />
+  <meta name="twitter:description" value="一个提供免费的短网址服务的短链。" />
+  <meta name="twitter:image" value="https://c1n.top/asset/image/logo/png/logo.png" />
+  <meta name="twitter:image:alt" value="c1nTop Logo" />
+  <!-- End Twitter Meta -->
+
+  <!--<link rel="stylesheet" href="/asset/fonts/index.css">-->
+  <link rel="stylesheet" href="/asset/css/styles.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.molikai.work/api/v1/file-proxy/https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" async><!-- End Google Fonts -->
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+    data-cf-beacon='{"token": "6bf7cd3f73f24e66ba26ba7749f80676"}'></script><!-- End Cloudflare Web Analytics -->
+
+  <!-- Clarity tracking code for https://c1n.top/ --><script>    (function(c,l,a,r,i,t,y){        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);    })(window, document, "clarity", "script", "m0fkugt98p");</script><!-- End Clarity tracking code for https://c1n.top/ -->
 </head>
 <body>
-  <!--<div class="loader"></div>-->
+  <div class="canister">
+    <header>
+      <h1>
+        c1nTop 短链
+      </h1>
 
-  <header>
-    <h1>Short 短链</h1>
-  </header>
+      <p class="noto-color-emoji-regular">提供免费的短网址服务 😎</p>
+    </header>
 
-  <main x-data="app">
-    <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
-    <input placeholder="在这里输入要缩短的网址..." x-model="url" x-ref="url" />
+    <main x-cloak x-data="app">
+      <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
+      <input placeholder="在这里输入要缩短的网址..." alt="在这里必填短链的目标网址，在生成完成后这里也会被替换为生成的短链" x-model="url" x-ref="url" />
 
-    <details>
-      <summary>可选自定义设置</summary>
-      <div>
-        <input placeholder="Slug" x-model="slug" />
-        <small>Slug 是默认随机生成的短 ID。</small>
-        <input placeholder="Email" x-model="email" />
-        <small>用于联系管理员编辑短链的邮箱。</small>
-      </div>
-    </details>
-    <button :class="{ loading }" :disabled="loading || isValidated()" class="submit"
-      @click="submit($refs, $nextTick)">生成</button>
-  </main>
+      <details>
+        <summary alt="点击展开可选自定义部分">可选自定义设置</summary>
+        <div>
+          <input placeholder="Slug" alt="最终短链的 ID 部分" x-model="slug" />
+          <small>默认随机生成的支持中文的短 ID。</small>
+          <input placeholder="Email" alt="凭这里填写的邮箱联系管理员，让管理员知道您是谁" x-model="email" />
+          <small>用于联系管理员编辑短链的邮箱。</small>
+        </div>
+      </details>
+      <button :class="{ loading }" :disabled="loading || isValidated()" class="submit"
+        alt="可用时点击此按钮，生成短链" @click="submit($refs, $nextTick)">生成</button>
+    </main>
 
-  <noscript>
-    <p>完整使用c1nTop短链需要浏览器支持（启用）JavaScript！</p>
-    <p>不是您的浏览器所导致的？请联系管理员进行排错：aran0519@outlook.com。</p>
-  </noscript>
+    <noscript>
+      <p>完整使用c1nTop短链需要浏览器支持（启用）JavaScript！</p>
+      <p>如果您的浏览器仍不支持（启用）JavaScript，请尝试使用Api进行短链创建。</p>
+      <p>不是您的浏览器所导致的？请联系管理员进行排错：info[at]molikai.work。</p>
+    </noscript>
 
-  <hr>
+    <hr>
 
-  <div x-cloak x-data="{ isCollapsed: false }" class="msg">
-    <button @click="isCollapsed = !isCollapsed" class="collapsible"
-      x-text="isCollapsed ? '折叠提示信息' : '展开提示信息'">折叠提示信息</button>
+    <div x-cloak x-data="{ isCollapsed: false }" class="msg">
+      <button @click="isCollapsed = !isCollapsed" class="collapsible" alt="如有需要，点击此按钮展开短链提示"
+        x-text="isCollapsed ? '折叠提示信息' : '展开提示信息'">折叠提示信息</button>
 
-      <div x-show="isCollapsed" x-collapse>
-      <p class="contact">
-        问题、反馈等请联系：<a href="mailto:1@example.com?subject=Feedback...&body=Hello...">1@example.com</a>
-      </p>
+        <div x-show="isCollapsed" x-collapse>
+        <p class="contact">
+          问题、反馈等请联系：<a href="mailto:info@molikai.work">info@molikai.work</a>
+        </p>
 
-      <div class="statement">
+        <div class="statement">
+          <p>
+            c1nTop 短链仅是提供便利工具，不保证审查用户发布的链接内容。<br>
+            用户不得提交违法链接，发现违规链接将被删除并采取措施。<br>
+            请谨慎相信短链跳转的内容，c1nTop 短链不对任何后果负责。
+          </p>
+
+          <p>我们也可能会定期检查无效、错误和违规的链接并删除，请注意……</p>
+        </div>
+
+        <div class="tip">
+          <p>提示：</p>
+          <p>c1n.top 使用 Js 等待秒数跳转，a77.top 使用重定向跳转。</p>
+          <p>Api 使用 POST 向 /create 发送数据，构建 JSON 包含 url 值，可选值。</p>
+          <p>短链生成 Api 有速率限制 10 秒内提交请求不超过 4 次。</p>
+        </div>
+
+        <table class="domain-table" border="5">
+          <tr>
+            <td>域名</td>
+            <td>短链</td>
+            <td>续费</td>
+            <td>推荐</td>
+          </tr>
+          <tr>
+            <td>c1n.top</td>
+            <td>JS 跳转</td>
+            <td>是的</td>
+            <td class="noto-color-emoji-regular">✅👍👍</td>
+          </tr>
+          <tr>
+            <td>a77.top</td>
+            <td>重定向</td>
+            <td>可能会</td>
+            <td class="noto-color-emoji-regular">✅💫👍</td>
+          </tr>
+          <tr>
+            <td>c1n.pages.dev</td>
+            <td>引流</td>
+            <td>免费的</td>
+            <td class="noto-color-emoji-regular">💢👍</td>
+          </tr>
+          <tr>
+            <td>www.rovn.ink</td>
+            <td>引流</td>
+            <td>免费的</td>
+            <td class="noto-color-emoji-regular">💢💫</td>
+          </tr>
+        </table>
+
+        <br>
+
         <p>
-          Short 短链仅是为了提供方便的工具，不保证及时审查用户发布的链接内容。
-          用户严禁提交违法内容链接，一旦发现违规链接将被删除并采取措施。
+          由<a href="https://github.com/x-dr/short" rel="nofollow noreferrer" target="_blank">X-DR/Short</a>的产品提供，二改于：<a 
+          href="https://github.com/molikai-work/short" rel="nofollow noreferrer" target="_blank">molikai-work/short</a>，<a 
+          href="https://pages.cloudflare.com/" rel="nofollow noreferrer" target="_blank">Cloudflare</a>提供计算服务。
         </p>
       </div>
-
-      <div class="tip">
-        <p>提示：</p>
-        <p>Api 使用 POST 向 /create 发送数据，构建 JSON 包含 url 值，可选值。</p>
-      </div>
     </div>
+
+    <footer>
+      <p class="links">
+        <a href="https://molikai.work/" title="友情链接：墨离的主页" target="_blank">墨离的主页</a> ｜
+        <a href="https://furries.fun/" title="友情链接：小黄泊的小站" target="_blank">小黄泊的小站</a>
+      </p>
+
+      <div class="copyright">
+        <p>Copyright &copy; 2023-Present
+          <a href="https://c1n.top/" rel="canonical">c1nTop</a>.
+          All rights reserved.
+        </p>
+
+        <a href="/pages/privacy-policy.html" title="点击查看我们的隐私政策" target="_blank">隐私政策</a> ｜
+        <a href="/sitemap.xml" title="点击查看本站的网站地图" target="_blank">网站地图</a> ｜
+        <a href="https://uptime.molikai.work/" title="点击查看总体的状态页面" target="_blank">状态页面</a>
+
+        <p><a href="https://icp.gov.moe/?keyword=20240092" target="_blank">萌ICP备20240092号</a></p>
+      </div>
+    </footer>
   </div>
 
-  <footer>
-    <p class="links">
-      <a href="https://go.molikai.work/" title="友情链接：墨离的主页" target="_blank">墨离的主页</a> ｜
-      <a href="https://bing-wallpaper.pages.dev/" title="友情链接：必应壁纸 API" target="_blank">必应壁纸 API</a>
-    </p>
-
-    <div class="copyright">
-      <p>Copyright &copy; 2023-Present
-        <a href="https://c1n.top/">Short</a>.
-        All rights reserved.
-        由<a href="https://github.com/x-dr/short" rel="nofollow noreferrer" target="_blank">x-dr/Short</a>的产品提供，二次修改在：<a 
-          href="https://github.com/molikai-work/short" rel="nofollow noreferrer" target="_blank">molikai-work/short</a>
-      </p>
-    </div>
-  </footer>
+  <a href="https://c1n.top/" title="c1nTop Logo">
+    <svg id="iconceCom" width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="r5" gradientUnits="userSpaceOnUse" gradientTransform="rotate(45)" style="transform-origin: center center;"><stop stop-color="#82d1ac"/><stop offset="1" stop-color="#8484de"/></linearGradient><radialGradient id="r6" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256) rotate(90) scale(512)"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient></defs><rect id="r4" width="256" height="256" x="0" y="0" rx="64" fill="url(#r5)" stroke="#FFFFFF" stroke-width="0" stroke-opacity="100%" paint-order="stroke"/><svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white" alignment-baseline="middle" x="64" y="64"><path d="M22 12A10 10 0 1 1 12 2"/><path d="M22 2 12 12"/><path d="M16 2h6v6"/></svg></svg>
+  </a>
 
   <script src="/asset/js/alpine.js" async></script>
 
   <!-- Alpine Plugins -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <!--<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>-->
+  <script defer src="/asset/js/alpine_collapse.min.js"></script>
 
   <!-- Alpine Core -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!--<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>-->
+  <script defer src="/asset/js/alpine_core.min.js"></script>
 
-  <script src="/asset/js/web_console.js"></script>
-
-  <script>
-    const app = {
-      url: '',
-      slug: '',
-      email: '',
-      alert: null,
-      loading: false,
-
-      isValidated() {
-        return !/^(https?):\/\/.{3,}/.test(this.url);
-      },
-
-      submit($refs, $nextTick) {
-        if (!this.url) {
-          this.alert = { type: 'error', message: '缺少必需的URL参数。' };
-          return;
-        }
-
-        if (this.isValidated()) {
-          this.alert = { type: 'error', message: 'URL 格式不合规范。' };
-          return;
-        }
-
-        this.alert = null
-        this.loading = true
-
-        const body = {
-          url: this.url
-        }
-
-        if (this.slug) {
-          body.slug = this.slug
-        }
-
-        if (this.email) {
-          body.email = this.email
-        }
-
-        fetch('/create', {
-          method: 'post',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(body)
-        })
-
-          .then(res => res.json())
-          .then(res => {
-            this.loading = false
-            if (res.message) {
-              this.alert = { type: 'error', message: res.message }
-              return
-            }
-
-            this.url = res.link
-
-            $nextTick(() => {
-              $refs.url.select()
-              this.alert = { type: 'success', message: `完成，请复制下方的链接` }
-            })
-          })
-          .catch(e => {
-            this.alert = { type: 'error', message: e.message }
-            this.loading = false
-          })
-      }
-    }
-  </script>
+  <script src="/asset/js/web_console.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) molikai-work (2024)
+ * molikai-work 的特定修改和新增部分
+ * 根据 MIT 许可证发布
+ * 
+ * 请注意，这个脚本尚未使用，预计在未来的版本正式使用，仅充当占位符，您也可以放心删除这个文件
+ * 此脚本的预计作用：配合 Cloudflare Workers 实现快捷短链数据库查询，在网页返回 JSON 格式的数据以显示短链数据库的数据
+ */
+
+import page404 from './404.html'; // 导入 404 页面
+
+export async function onRequest(context) {
+    // 跨域请求
+    if (context.request.method === 'OPTIONS') {
+        return new Response(null, {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '86400',
+            },
+        });
+    }
+
+    try {
+        // 获取请求对象
+        const { request, env } = context;
+
+        const hostName = new URL(request.url).hostname;
+
+        // 检查请求的主机名
+        if (!env.SHORT_DOMAINS) {
+            // 环境变量不存时跳过代码执行
+        } else if (hostName !== `${env.SHORT_DOMAINS}`) {
+            return new Response(null, {
+                status: 500
+            });
+        }
+
+        // 检查请求头中的 Authorization 字段的值
+        const authHeader = request.headers.get('Authorization');
+
+        // 如果 Authorization 字段不存在
+        if (!authHeader) {
+            const responseJson = {
+                code: 401,
+                message: 'Authorization Required',
+                time: Date.now()
+            };
+
+            return new Response(JSON.stringify(responseJson), {
+                status: 401,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '86400',
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'WWW-Authenticate': 'Basic realm="Access to the admin page"'
+                }
+            });
+        }
+
+        // 解码 base64 编码 Authorization 字段的值
+        const credentials = atob(authHeader.split(' ')[1]);
+        const [username, password] = credentials.split(':');
+
+        let validUsername;
+        let validPassword;
+
+        // 从环境变量中获取用户名和密码
+        if (!env.ADMIN_USERNAME && !env.ADMIN_PASSWORD) {
+            return new Response(page404, {
+                status: 404,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '86400',
+                    "content-type": "text/html;charset=UTF-8"
+                }
+            });
+        } else {
+            validUsername = env.ADMIN_USERNAME;
+            validPassword = env.ADMIN_PASSWORD;
+        }
+
+        // 检查用户名和密码是否不匹配
+        if (username !== validUsername || password !== validPassword) {
+            const responseJson = {
+                status: 403,
+                message: 'Access Denied',
+                timestamp: Date.now()
+            };
+
+            // 如果用户名或密码不匹配，返回 403 Forbidden 错误
+            return new Response(JSON.stringify(responseJson), {
+                status: 403,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '86400',
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'WWW-Authenticate': 'Basic realm="Access to the admin page"'
+                }
+            });
+        }
+
+        // 继续执行 Worker 请求
+        return env.SERVICE.fetch(request);
+    } catch (error) {
+        return createErrorResponse(500, 'Internal Server Error');
+    }
+}

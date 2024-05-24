@@ -70,13 +70,21 @@ h1 {
   opacity: 0.2;
 }
 
-header p {
-  font-size: 16px;
-  color: #697969;
+.tip {
+  font-size: 14px;
+  color: #666;
 }
 
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
+.warning {
+  font-size: 20px;
+  color: #da3838;
+}
+
+.contact {
+  color: #a05050;
+}
+
+.links {
+  font-size: 16px;
+  margin: 20px 5px 20px 5px;
 }

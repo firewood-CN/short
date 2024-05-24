@@ -5,6 +5,8 @@
         "/*"
     ],
     "exclude": [
-        "/LICENSE"
+        "/pages/",
+        "/LICENSE",
+        "/robots.txt"
     ]
 }
