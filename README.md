@@ -6,10 +6,6 @@
 
 问题反馈请提交 `issues` 或者直接联系 `info@molikai.work`。
 
-***现有的数据库数据表处理项已更新，原 `1.0` 版本的使用请手动使用命令在 `links` 数据表添加一项 `email`***
-
-"ALTER TABLE "links" ADD "email" TEXT;"
-
 ## 介绍
 
 一个使用 Cloudflare Pages 创建的 URL 缩短器。
