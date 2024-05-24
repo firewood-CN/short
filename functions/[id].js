@@ -5,7 +5,7 @@
  */
 
 import page403 from './403.html'; // 导入 403 页面
-import page404 from '/404.html'; // 导入 404 页面
+import page404 from './404.html'; // 导入 404 页面
 
 // 处理 GET 请求的函数
 export async function onRequestGet(context) {
