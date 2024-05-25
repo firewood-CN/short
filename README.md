@@ -111,6 +111,14 @@ curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com
 }
 ```
 
+### 信息修改
+
+您可以修改程序页面底部的版权声明，如改为“Copyright © 2024 Example. All rights reserved.”，但还请声明/保留此程序的来源、作者及所在仓库地址。
+
+您可以快捷修改文件 `functions/[id].js` 中的 `shortName`、`htmlHead`和`footer` 及其他常量值来统一编辑短链跳转相关页面显示文本。从标有注释“统一固定内容”字样的地方开始到结束。
+
+代码中包含的隐私政策或相关文件请按照实际信息修改。
+
 ### 数据表解释
 
 > 表 `links` 短链记录
