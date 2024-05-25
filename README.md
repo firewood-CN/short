@@ -8,10 +8,9 @@
 
 ## 介绍
 
-一个使用 Cloudflare Pages 创建的 URL 缩短器。
+一个使用 Cloudflare Pages 创建的免费 URL 缩短/短链服务。
 
 *可靠的短链示例* : [https://c1n.top/](https://c1n.top/)
-
 
 ### 利用 Cloudflare Pages 部署
 
@@ -23,7 +22,7 @@
 
 4. 选择你创建的项目存储库，在 `设置构建和部署` 部分中，全部默认即可，不需要修改框架预设、构建命令等内容。
 
-5. 点击 `保存并部署` ，稍等片刻，你的网站就部署好了。
+5. 点击 `保存并部署` ，稍等片刻，短链服务就部署好了。
 
 6. 创建D1数据库参考[这里](https://github.com/x-dr/telegraph-Image/blob/main/docs/manage.md)。
 
@@ -85,7 +84,7 @@ CREATE UNIQUE INDEX banUrl_index ON banUrl(url);
 
 | 变量名称 | 示例值 | 可选 | 介绍 |
 |---------|----|------|-----|
-| SHORT_DOMAINS     | example.com               | 是的 | 短链生成后的显示域名，没有变量则默认自动获取当前域名 |
+| SHORT_DOMAINS     | example.com               | 是的 | 短链生成后的显示域名（主域名），没有变量则默认自动获取当前域名 |
 | DIRECT_DOMAINS    | example.com,example.org   | 是的 | 直链域名，设置后使用该域名访问则直接 302 重定向跳转，而不是默认的 JS 跳转，多个用逗号分割，没有变量则默认不启用直链跳转 |
 | ALLOW_DOMAINS     | example.com,example.org   | 是的 | 允许解析目标地址的域名白名单，设置后只能使用该域名解析目标地址，否则拒绝请求，多个用逗号分割，没有变量则默认不启用允许解析域名白名单 |
 
@@ -93,10 +92,13 @@ CREATE UNIQUE INDEX banUrl_index ON banUrl(url);
 
 ```bash
 # POST /create
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com"}' https://d.131213.xyz/create
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com"}' https://c1n.top/create
 
-# 指定slug
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com","slug":"example"}' https://d.131213.xyz/create
+# 指定 slug
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com","slug":"1example"}' https://c1n.top/create
+
+# 指定 email
+curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com","email":"info@example.com"}' https://c1n.top/create
 
 ```
 
@@ -104,8 +106,8 @@ curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com
 
 ```json
 {
-  "slug": "example",
-  "link": "http://d.131213.xyz/example"
+  "slug": "1example",
+  "link": "http://c1n.top/1example"
 }
 ```
 
@@ -113,30 +115,30 @@ curl -X POST -H "Content-Type: application/json" -d '{"url":"https://example.com
 
 > 表 `links` 短链记录
 
-- id  = 行数据在数据表中的唯一记录 ID
-- url = 短链的目标 URL
-- slug = 短链对应的唯一短 ID
-- email = 用户可选提交的 Email 地址
-- ua = 用户的浏览器标识（注：此数据依靠客户端标头，可篡改）
-- ip = 用户的 IP 地址
-- status = 短链的状态，默认为“1”，“-1”或“ban”为封禁、“1”为正常、“2”或“skip”为跳过黑名单
-- hostname = 用户生成短链访问的主机名
-- create_time = 短链生成时间
+- `id` 行数据在数据表中的唯一记录 ID
+- `url` 短链的目标 URL
+- `slug` 短链对应的唯一短 ID
+- `email` 用户可选提交的 Email 地址
+- `ua` 用户的浏览器标识（注：此数据依靠客户端标头，可篡改）
+- `ip` 用户的 IP 地址
+- `status` 短链的状态，默认为“1”，“-1”或“ban”为封禁、“1”为正常、“2”或“skip”为跳过黑名单
+- `hostname` 用户生成短链访问的主机名
+- `create_time` 短链生成时间
 
 >表 `logs` 短链访问记录
 
-- id = 行数据在数据表中的唯一记录 ID
-- url = 访问的短链的目标 URL
-- slug = 访问的短链对应的唯一短 ID
-- referer = 访问短链的用户来源（注：此数据依靠客户端标头，可篡改）
-- ua = 访问的用户的浏览器标识（注：此数据依靠客户端标头，可篡改）
-- ip = 访问的用户的 IP 地址
-- status = 访问的短链的状态，默认为“1”，“-1”或“ban”为封禁、“1”为正常、“2”或“skip”为跳过黑名单
-- hostname = 用户访问短链所访问的主机名
-- create_time = 用户访问短链的时间
+- `id` 行数据在数据表中的唯一记录 ID
+- `url` 访问的短链的目标 URL
+- `slug` 访问的短链对应的唯一短 ID
+- `referer` 访问短链的用户来源（注：此数据依靠客户端标头，可篡改）
+- `ua` 访问的用户的浏览器标识（注：此数据依靠客户端标头，可篡改）
+- `ip` 访问的用户的 IP 地址
+- `status` 访问的短链的状态，默认为“1”，“-1”或“ban”为封禁、“1”为正常、“2”或“skip”为跳过黑名单
+- `hostname` 用户访问短链所访问的主机名
+- `create_time` 用户访问短链的时间
 
 >表 `banUrl` 域名黑名单
 
-- id = 行数据在数据表中的唯一记录 ID
-- url = 黑名单域名
-- create_time = 黑名单添加时间
+- `id` 行数据在数据表中的唯一记录 ID
+- `url` 黑名单域名
+- `create_time` 黑名单添加时间
