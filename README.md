@@ -12,6 +12,14 @@
 
 *可靠的短链示例* : [https://c1n.top/](https://c1n.top/)
 
+<details>
+  <summary>《点击这里查看图片》</summary>
+  
+  ![2_4](/doce/2_4.png)
+
+  ![2_5](/doce/2_5.png)
+</details>
+
 ### 利用 Cloudflare Pages 部署
 
 1. Fork 分叉本项目 : [https://github.com/molikai-work/short](https://github.com/molikai-work/short)。
@@ -65,6 +73,19 @@ CREATE INDEX logs_index ON logs(slug);
 CREATE UNIQUE INDEX banUrl_index ON banUrl(url);
 ```
 8. 选择部署完成项目，前往 Cloudflare Pages 项目控制面板依次点击`设置`->`函数`->`D1 数据库绑定`->`编辑绑定`->添加变量，变量名称填写：`DB` -> D1 数据库选择 `你刚刚创建好的 D1 数据库`
+
+<details>
+  <summary>《点击这里查看绑定操作的图示》</summary>
+
+  打开具体项目的控制台：
+  ![1](/doce/1.png)
+
+  进入设置找到函数选项并向下拉：
+  ![2](/doce/2.png)
+
+  找到D1数据库绑定，编辑，变量名称填“DB”，D1数据库选择刚刚创建的数据库（这里已经填好，示范）：
+  ![3](/doce/3.png)
+</details>
 
 9. 重新部署项目以刷新数据，完成。
 
