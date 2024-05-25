@@ -104,7 +104,7 @@ export async function onRequest(context) {
             });
         }
 
-        // 继续执行 Worker 请求
+        // 继续执行 Worker 的请求
         return env.SERVICE.fetch(request);
     } catch (error) {
         return createErrorResponse(500, 'Internal Server Error');
